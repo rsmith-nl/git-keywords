@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # Author: R.F. Smith <rsmith@xs4all.nl>
-# Time-stamp: <2012-06-29 23:25:24 rsmith>
+# Time-stamp: <2012-08-31 21:14:33 rsmith>
 #
 # To the extent possible under law, Roland Smith has waived all copyright and
 # related or neighboring rights to kwclean.py. This work is published from the
@@ -14,5 +14,5 @@ import sys
 import re
 
 for line in sys.stdin:
-    line = re.sub('\$Date.*\$', '$Date$', line)
-    print re.sub('\$Revision.*\$', '$Revision$', line),
+    line = re.sub('\$Da' + 'te.*\$', '$Da' + 'te$', line)
+    print re.sub('\$Revi' + 'sion.*\$', '$Revi' + 'sion$', line),
