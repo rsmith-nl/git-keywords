@@ -14,5 +14,5 @@ import sys
 import re
 
 for line in sys.stdin:
-    line = re.sub('\$Da' + 'te.*\$', '$Da' + 'te$', line)
-    print re.sub('\$Revi' + 'sion.*\$', '$Revi' + 'sion$', line),
+    line = re.sub(r'\$Da' + r'te.*\$', '$Da' + 'te$', line)
+    print re.sub(r'\$Revi' + r'sion.*\$', '$Revi' + 'sion$', line),
