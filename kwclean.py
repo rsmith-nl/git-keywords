@@ -13,6 +13,8 @@
 import sys
 import re
 
-for line in sys.stdin:
-    line = re.sub(r'\$Da' + r'te.*\$', '$Da' + 'te$', line)
-    print re.sub(r'\$Revi' + r'sion.*\$', '$Revi' + 'sion$', line),
+## This is the main program ##
+if __name__ == '__main__':
+    for line in sys.stdin:
+        line = re.sub(r'\$Da' + r'te.*\$', '$Da' + 'te$', line)
+        print re.sub(r'\$Revi' + r'sion.*\$', '$Revi' + 'sion$', line),
