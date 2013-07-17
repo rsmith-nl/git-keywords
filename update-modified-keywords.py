@@ -8,7 +8,8 @@
 # related or neighboring rights to <script>. This work is published from the
 # Netherlands. See http://creativecommons.org/publicdomain/zero/1.0/
 
-"""Remove and check out all files that contain keywords."""
+"""Remove and check out those files that that contain keywords and have 
+changed since in the last commit."""
 
 from __future__ import print_function, division
 import os
@@ -37,30 +38,15 @@ def checkfor(args):
         sys.exit(1)
 
 
-def normalfiles(top='.', exlist=None):
-    """Find ordinary files. Exclude files whose paths contain one of the
-    parts of the exlist
+def modifiedfiles():
+    """Find files that have been modified in the last commit.
 
-    :top: Directory to start in
-    :exlist: List of paths to skip
-    :returns: @todo
+    :returns: A list of filenames.
     """
-    if exlist == None:
-        exlist = ['.git', '__pycache__']
-    flist = []
-    for root, _, files in os.walk(top):
-        if all([not b in root for b in exlist]):
-            flist += [os.path.join(root, f) for f in files]
-    return flist
-
-
-def gitmodified():
-    """Find files that are modified by git.
-    :returns: A list of modified files.
-    """
-    lns = subprocess.check_output(['git', 'status', '-s']).splitlines()
-    lns = ['./' + l.split()[-1] for l in lns]
-    return lns
+    args = ['git', 'diff-tree', 'HEAD~1', 'HEAD', '--name-only', '-r',
+            '--diff-filter=ACMRT']
+    fnl = subprocess.check_output(args).splitlines()
+    return fnl
 
 
 def keywordfiles(fns):
@@ -91,20 +77,16 @@ def main():
     if not os.access('.git', os.F_OK):
         print('No .git directory found!')
         sys.exit(1)
-    # Get all files
-    files = normalfiles()
-    # Remove those that aren't checked in
-    mod = gitmodified()
-    #print('DEBUG: modified files = ', mod)
-    if mod:
-        files = [f for f in files if not f in mod]
+    # Get modified files
+    files = modifiedfiles()
     files.sort()
+    #print('DEBUG: modified files', files)
     # Find files that have keywords in them
     kwfn = keywordfiles(files)
     for fn in kwfn:
         #print('DEBUG: removing', fn)
         os.remove(fn)
-    #print('DEBUG: checking out files')
+    #print('DEBUG: checking out files', kwfn)
     args = ['git', 'checkout', '-f'] + kwfn
     subprocess.call(args)
 
