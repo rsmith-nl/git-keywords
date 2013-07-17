@@ -5,8 +5,9 @@
 # $Date$
 #
 # To the extent possible under law, Roland Smith has waived all copyright and
-# related or neighboring rights to <script>. This work is published from the
-# Netherlands. See http://creativecommons.org/publicdomain/zero/1.0/
+# related or neighboring rights to update-all-keywords.py. This work is 
+# published from the Netherlands. 
+# See http://creativecommons.org/publicdomain/zero/1.0/
 
 """Remove and check out all files that contain keywords."""
 
