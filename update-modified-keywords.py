@@ -15,6 +15,7 @@ changed since in the last commit in the current working directory."""
 
 from __future__ import print_function, division
 import os
+import mmap
 import sys
 import subprocess
 
@@ -60,10 +61,11 @@ def keywordfiles(fns):
     revkw = 'JFJldmlzaW9u'.decode('base64')
     rv = []
     for fn in fns:
-        with open(fn) as f:
-            data = f.read()
-        if datekw in data or revkw in data:
-            rv.append(fn)
+        with open(fn, 'rb') as f:
+            mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+            if mm.find(datekw) > -1 or mm.find(revkw) > -1:
+                rv.append(fn)
+            mm.close()
     return rv
 
 
