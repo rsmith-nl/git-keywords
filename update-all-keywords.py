@@ -3,13 +3,15 @@
 #
 # Author: R.F. Smith <rsmith@xs4all.nl>
 # $Date$
+# $Revision$
 #
 # To the extent possible under law, Roland Smith has waived all copyright and
 # related or neighboring rights to update-all-keywords.py. This work is 
 # published from the Netherlands. 
 # See http://creativecommons.org/publicdomain/zero/1.0/
 
-"""Remove and check out all files under git's control that contain keywords."""
+"""Remove and check out all files under git's control that contain keywords in
+the current working directory."""
 
 from __future__ import print_function, division
 import os
@@ -29,7 +31,6 @@ def checkfor(args):
         if ' ' in args:
             raise ValueError('No spaces in single command allowed.')
         args = [args]
-    #print('DEBUG: checking for', args[0])
     try:
         with open(os.devnull, 'w') as bb:
             subprocess.check_call(args, stdout=bb, stderr=bb)
@@ -72,9 +73,6 @@ def keywordfiles(fns):
             data = f.read()
         if datekw in data or revkw in data:
             rv.append(fn)
-            #print('DEBUG: found keyword in', fn)
-        #else:
-            #print('DEBUG: no keyword in', fn)
     return rv
 
 
@@ -90,16 +88,13 @@ def main():
     files = git_ls_files()
     # Remove those that aren't checked in
     mod = gitmodified()
-    #print('DEBUG: modified files = ', mod)
     if mod:
         files = [f for f in files if not f in mod]
     files.sort()
     # Find files that have keywords in them
     kwfn = keywordfiles(files)
     for fn in kwfn:
-        #print('DEBUG: removing', fn)
         os.remove(fn)
-    #print('DEBUG: checking out files', kwfn)
     args = ['git', 'checkout', '-f'] + kwfn
     subprocess.call(args)
 

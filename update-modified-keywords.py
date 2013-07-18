@@ -3,6 +3,7 @@
 #
 # Author: R.F. Smith <rsmith@xs4all.nl>
 # $Date$
+# $Revision$
 #
 # To the extent possible under law, Roland Smith has waived all copyright and
 # related or neighboring rights to update-modified-keywords.py. This work is 
@@ -10,7 +11,7 @@
 # See http://creativecommons.org/publicdomain/zero/1.0/
 
 """Remove and check out those files that that contain keywords and have 
-changed since in the last commit."""
+changed since in the last commit in the current working directory."""
 
 from __future__ import print_function, division
 import os
@@ -30,7 +31,6 @@ def checkfor(args):
         if ' ' in args:
             raise ValueError('No spaces in single command allowed.')
         args = [args]
-    #print('DEBUG: checking for', args[0])
     try:
         with open(os.devnull, 'w') as bb:
             subprocess.check_call(args, stdout=bb, stderr=bb)
@@ -64,9 +64,6 @@ def keywordfiles(fns):
             data = f.read()
         if datekw in data or revkw in data:
             rv.append(fn)
-            #print('DEBUG: found keyword in', fn)
-        #else:
-            #print('DEBUG: no keyword in', fn)
     return rv
 
 
@@ -81,13 +78,10 @@ def main():
     # Get modified files
     files = modifiedfiles()
     files.sort()
-    #print('DEBUG: modified files', files)
     # Find files that have keywords in them
     kwfn = keywordfiles(files)
     for fn in kwfn:
-        #print('DEBUG: removing', fn)
         os.remove(fn)
-    #print('DEBUG: checking out files', kwfn)
     args = ['git', 'checkout', '-f'] + kwfn
     subprocess.call(args)
 
