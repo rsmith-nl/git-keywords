@@ -57,6 +57,8 @@ def keywordfiles(fns):
     :fns: A list of filenames
     :returns: A list for filenames for files that contain keywords.
     """
+    # These lines are encoded otherwise they would be mangled if this file
+    # is checked in!
     datekw = 'JERhdGU='.decode('base64')
     revkw = 'JFJldmlzaW9u'.decode('base64')
     rv = []
@@ -69,16 +71,23 @@ def keywordfiles(fns):
     return rv
 
 
-def main():
+def main(args):
     """Main program.
+
+    :args: command line arguments
     """
+    # Check if git is available.
     checkfor(['git', '--version'])
     # Check if .git exists
     if not os.access('.git', os.F_OK):
         print('No .git directory found!')
         sys.exit(1)
+    print('{}: Updating modified files.'.format(args[0]))
     # Get modified files
     files = modifiedfiles()
+    if not files:
+        print('{}: Nothing to do.'.format(args[0]))
+        sys.exit(0)
     files.sort()
     # Find files that have keywords in them
     kwfn = keywordfiles(files)
@@ -89,4 +98,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)

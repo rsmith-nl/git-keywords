@@ -49,10 +49,10 @@ def git_ls_files():
     return flist
 
 
-def gitmodified():
-    """Find files that are modified by git.
+def git_not_checkedin():
+    """Find files that are modified but are not checked in.
 
-    :returns: A list of modified files.
+    :returns: A list of modified files that are not checked in.
     """
     lns = subprocess.check_output(['git', 'status', '-s']).splitlines()
     lns = [l.split()[-1] for l in lns]
@@ -65,6 +65,8 @@ def keywordfiles(fns):
     :fns: A list of filenames
     :returns: A list for filenames for files that contain keywords.
     """
+    # These lines are encoded otherwise they would be mangled if this file
+    # is checked in!
     datekw = 'JERhdGU='.decode('base64')
     revkw = 'JFJldmlzaW9u'.decode('base64')
     rv = []
@@ -76,9 +78,12 @@ def keywordfiles(fns):
     return rv
 
 
-def main():
+def main(args):
     """Main program.
+
+    :args: command line arguments
     """
+    # Check if git is available.
     checkfor(['git', '--version'])
     # Check if .git exists
     if not os.access('.git', os.F_OK):
@@ -87,17 +92,24 @@ def main():
     # Get all files that are controlled by git.
     files = git_ls_files()
     # Remove those that aren't checked in
-    mod = gitmodified()
+    mod = git_not_checkedin()
     if mod:
         files = [f for f in files if not f in mod]
+    if not files:
+        print('{}: Only uncommitted changes, nothing to do.'.format(args[0]))
+        sys.exit(0)
     files.sort()
     # Find files that have keywords in them
     kwfn = keywordfiles(files)
-    for fn in kwfn:
-        os.remove(fn)
-    args = ['git', 'checkout', '-f'] + kwfn
-    subprocess.call(args)
+    if kwfn:
+        print('{}: Updating all files.'.format(args[0]))
+        for fn in kwfn:
+            os.remove(fn)
+        args = ['git', 'checkout', '-f'] + kwfn
+        subprocess.call(args)
+    else:
+        print('{}: Nothing to update.'.format(args[0]))
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
