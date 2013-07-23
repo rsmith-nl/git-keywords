@@ -15,6 +15,10 @@ import re
 
 ## This is the main program ##
 if __name__ == '__main__':
+    dre = re.compile(''.join([r'\$', r'Date.*\$']))
+    drep = ''.join(['$', 'Date', '$'])
+    rre = re.compile(''.join([r'\$', r'Revision.*\$']))
+    rrep = ''.join(['$', 'Revision', '$'])
     for line in sys.stdin:
-        line = re.sub(r'\$Da' + r'te.*\$', '$Da' + 'te$', line)
-        print re.sub(r'\$Revi' + r'sion.*\$', '$Revi' + 'sion$', line),
+        line = dre.sub(drep, line)
+        print rre.sub(rrep, line),
