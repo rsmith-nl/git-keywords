@@ -64,10 +64,13 @@ def keywordfiles(fns):
     rv = []
     for fn in fns:
         with open(fn, 'rb') as f:
-            mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
-            if mm.find(datekw) > -1 or mm.find(revkw) > -1:
-                rv.append(fn)
-            mm.close()
+            try:
+                mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+                if mm.find(datekw) > -1 or mm.find(revkw) > -1:
+                    rv.append(fn)
+                mm.close()
+            except ValueError:
+                pass
     return rv
 
 
