@@ -21,7 +21,7 @@ def gitdate():
     """Get the date from the latest commit in ISO8601 format.
     """
     args = ['git', 'log',  '-1', '--date=iso']
-    dline = [l for l in subprocess.check_output(args).splitlines() 
+    dline = [l for l in subprocess.check_output(args).splitlines()
              if l.startswith('Date')]
     try:
         dat = dline[0][5:].strip()
@@ -59,6 +59,5 @@ def main():
         print rre.sub(rev, line),
 
 
-## This is the main program ##
 if __name__ == '__main__':
     main()

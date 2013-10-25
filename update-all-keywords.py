@@ -6,8 +6,8 @@
 # $Revision$
 #
 # To the extent possible under law, Roland Smith has waived all copyright and
-# related or neighboring rights to update-all-keywords.py. This work is 
-# published from the Netherlands. 
+# related or neighboring rights to update-all-keywords.py. This work is
+# published from the Netherlands.
 # See http://creativecommons.org/publicdomain/zero/1.0/
 
 """Remove and check out all files under git's control that contain keywords in
@@ -41,7 +41,7 @@ def checkfor(args):
 
 
 def git_ls_files():
-    """Find ordinary files that are controlled by git. 
+    """Find ordinary files that are controlled by git.
 
     :returns: A list of files
     """

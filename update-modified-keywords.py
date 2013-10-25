@@ -6,11 +6,11 @@
 # $Revision$
 #
 # To the extent possible under law, Roland Smith has waived all copyright and
-# related or neighboring rights to update-modified-keywords.py. This work is 
-# published from the Netherlands. 
+# related or neighboring rights to update-modified-keywords.py. This work is
+# published from the Netherlands.
 # See http://creativecommons.org/publicdomain/zero/1.0/
 
-"""Remove and check out those files that that contain keywords and have 
+"""Remove and check out those files that that contain keywords and have
 changed since in the last commit in the current working directory."""
 
 from __future__ import print_function, division
