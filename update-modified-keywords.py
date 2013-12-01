@@ -45,9 +45,17 @@ def modifiedfiles():
 
     :returns: A list of filenames.
     """
-    args = ['git', 'diff-tree', 'HEAD~1', 'HEAD', '--name-only', '-r',
-            '--diff-filter=ACMRT']
-    fnl = subprocess.check_output(args).splitlines()
+    fnl = []
+    try:
+        args = ['git', 'diff-tree', 'HEAD~1', 'HEAD', '--name-only', '-r',
+                '--diff-filter=ACMRT']
+        with open(os.devnull, 'w') as bb:
+            fnl = subprocess.check_output(args, stderr=bb).splitlines()
+    except subprocess.CalledProcessError as e:
+        if e.returncode == 128:  # new repository
+            args = ['git', 'ls-files']
+            with open(os.devnull, 'w') as bb:
+                fnl = subprocess.check_output(args, stderr=bb).splitlines()
     return fnl
 
 
