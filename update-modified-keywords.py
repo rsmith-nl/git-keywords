@@ -51,11 +51,16 @@ def modifiedfiles():
                 '--diff-filter=ACMRT']
         with open(os.devnull, 'w') as bb:
             fnl = subprocess.check_output(args, stderr=bb).splitlines()
+            # Deal with unmodified repositories
+            if len(fnl) == 1 and fnl[0] is 'clean':
+                return []
     except subprocess.CalledProcessError as e:
         if e.returncode == 128:  # new repository
             args = ['git', 'ls-files']
             with open(os.devnull, 'w') as bb:
                 fnl = subprocess.check_output(args, stderr=bb).splitlines()
+    # Only return regular files.
+    fnl = [i for i in fnl if os.path.isfile(i)]
     return fnl
 
 
@@ -66,7 +71,7 @@ def keywordfiles(fns):
     :returns: A list for filenames for files that contain keywords.
     """
     # These lines are encoded otherwise they would be mangled if this file
-    # is checked in!
+    # is checked in my git repo!
     datekw = 'JERhdGU='.decode('base64')
     revkw = 'JFJldmlzaW9u'.decode('base64')
     rv = []
