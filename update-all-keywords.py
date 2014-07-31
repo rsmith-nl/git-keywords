@@ -99,7 +99,7 @@ def main(args):
     # Remove those that aren't checked in
     mod = git_not_checkedin()
     if mod:
-        files = [f for f in files if not f in mod]
+        files = [f for f in files if f not in mod]
     if not files:
         print('{}: Only uncommitted changes, nothing to do.'.format(args[0]))
         sys.exit(0)
