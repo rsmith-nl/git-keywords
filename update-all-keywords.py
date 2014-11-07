@@ -13,6 +13,7 @@
 """Remove and check out all files under git's control that contain keywords in
 the current working directory."""
 
+from base64 import b64decode
 import os
 import mmap
 import sys
@@ -67,8 +68,8 @@ def keywordfiles(fns):
     """
     # These lines are encoded otherwise they would be mangled if this file
     # is checked in!
-    datekw = 'JERhdGU='.decode('base64')
-    revkw = 'JFJldmlzaW9u'.decode('base64')
+    datekw = b64decode('JERhdGU=')
+    revkw = b64decode('JFJldmlzaW9u')
     rv = []
     for fn in fns:
         with open(fn, 'rb') as f:
