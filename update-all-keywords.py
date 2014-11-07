@@ -13,7 +13,6 @@
 """Remove and check out all files under git's control that contain keywords in
 the current working directory."""
 
-from __future__ import print_function, division
 import os
 import mmap
 import sys
