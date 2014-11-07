@@ -13,6 +13,7 @@
 """Remove and check out those files that that contain keywords and have
 changed since in the last commit in the current working directory."""
 
+from base64 import b64decode
 import os
 import mmap
 import sys
@@ -71,8 +72,8 @@ def keywordfiles(fns):
     """
     # These lines are encoded otherwise they would be mangled if this file
     # is checked in my git repo!
-    datekw = 'JERhdGU='.decode('base64')
-    revkw = 'JFJldmlzaW9u'.decode('base64')
+    datekw = b64decode('JERhdGU=')
+    revkw = b64decode('JFJldmlzaW9u')
     rv = []
     for fn in fns:
         with open(fn, 'rb') as f:
