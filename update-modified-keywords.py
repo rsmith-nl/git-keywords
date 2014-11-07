@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3.4
+# vim:fileencoding=utf-8:ft=python
 #
 # Author: R.F. Smith <rsmith@xs4all.nl>
 # $Date$
@@ -12,7 +12,6 @@
 
 """Remove and check out those files that that contain keywords and have
 changed since in the last commit in the current working directory."""
-
 
 import os
 import mmap
