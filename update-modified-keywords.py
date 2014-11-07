@@ -13,7 +13,7 @@
 """Remove and check out those files that that contain keywords and have
 changed since in the last commit in the current working directory."""
 
-from __future__ import print_function, division
+
 import os
 import mmap
 import sys
