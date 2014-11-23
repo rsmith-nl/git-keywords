@@ -102,11 +102,14 @@ def main(args):
     # Get modified files
     files = modifiedfiles()
     if not files:
-        print('{}: Nothing to do.'.format(args[0]))
+        print('{}: No modified files.'.format(args[0]))
         sys.exit(0)
     files.sort()
     # Find files that have keywords in them
     kwfn = keywordfiles(files)
+    if not kwfn:
+        print('{}: No keyword files modified.'.format(args[0]))
+        sys.exit(0)
     for fn in kwfn:
         os.remove(fn)
     args = ['git', 'checkout', '-f'] + kwfn
