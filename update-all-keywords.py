@@ -14,10 +14,10 @@
 the current working directory."""
 
 from base64 import b64decode
-import os
 import mmap
-import sys
+import os
 import subprocess
+import sys
 
 
 def checkfor(args):

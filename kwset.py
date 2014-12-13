@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2,7
 # vim:fileencoding=utf-8:ft=python
 #
 # Author: R.F. Smith <rsmith@xs4all.nl>
@@ -12,9 +12,9 @@
    subtitutes them in the standard input."""
 
 import os
-import sys
-import subprocess
 import re
+import subprocess
+import sys
 
 
 def gitdate():

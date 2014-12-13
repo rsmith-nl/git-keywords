@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 # vim:fileencoding=utf-8:ft=python
 #
 # Author: R.F. Smith <rsmith@xs4all.nl>
@@ -10,8 +10,8 @@
 
 """Remove the Date and Revision keyword contents from the standard input."""
 
-import sys
 import re
+import sys
 
 if __name__ == '__main__':
     dre = re.compile(''.join([r'\$', r'Date.*\$']))
