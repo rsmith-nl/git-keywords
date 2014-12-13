@@ -1,4 +1,4 @@
-#!/usr/bin/env python2,7
+#!/usr/bin/env python2.7
 # vim:fileencoding=utf-8:ft=python
 #
 # Author: R.F. Smith <rsmith@xs4all.nl>
