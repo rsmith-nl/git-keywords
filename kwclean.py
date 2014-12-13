@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.4
 # vim:fileencoding=utf-8:ft=python
 #
 # Author: R.F. Smith <rsmith@xs4all.nl>
@@ -20,4 +20,4 @@ if __name__ == '__main__':
     rrep = ''.join(['$', 'Revision', '$'])
     for line in sys.stdin:
         line = dre.sub(drep, line)
-        print rre.sub(rrep, line),
+        print(rre.sub(rrep, line), end="")
