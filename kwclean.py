@@ -11,13 +11,13 @@
 """Remove the Date and Revision keyword contents from the standard input."""
 
 import re
-import sys
+import fileinput
 
 if __name__ == '__main__':
     dre = re.compile(''.join([r'\$', r'Date.*\$']))
     drep = ''.join(['$', 'Date', '$'])
     rre = re.compile(''.join([r'\$', r'Revision.*\$']))
     rrep = ''.join(['$', 'Revision', '$'])
-    for line in sys.stdin:
+    for line in fileinput.input():
         line = dre.sub(drep, line)
         print(rre.sub(rrep, line), end="")

@@ -11,17 +11,18 @@
 """Fill the Date and Revision keywords from the latest git commit and tag and
    subtitutes them in the standard input."""
 
+import fileinput
 import os
 import re
 import subprocess
-import sys
 
 
 def gitdate():
     """Get the date from the latest commit in ISO8601 format.
     """
     args = ['git', 'log',  '-1', '--date=iso']
-    outlines = subprocess.check_output(args, universal_newlines=True).splitlines()
+    outdata = subprocess.check_output(args, universal_newlines=True)
+    outlines = outdata.splitlines()
     dline = [l for l in outlines if l.startswith('Date')]
     try:
         dat = dline[0][5:].strip()
@@ -55,7 +56,7 @@ def main():
         sys.exit(1)
     date = gitdate()
     rev = gitrev()
-    for line in sys.stdin:
+    for line in fileinput.input():
         line = dre.sub(date, line)
         print(rre.sub(rev, line), end="")
 
