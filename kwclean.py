@@ -12,6 +12,9 @@
 
 import re
 import fileinput
+import locale
+
+locale.setlocale(locale.LC_ALL, '')
 
 if __name__ == '__main__':
     dre = re.compile(''.join([r'\$', r'Date.*\$']))

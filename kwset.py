@@ -12,10 +12,12 @@
    subtitutes them in the standard input."""
 
 import fileinput
+import locale
 import os
 import re
 import subprocess
 
+locale.setlocale(locale.LC_ALL, '')
 
 def gitdate():
     """Get the date from the latest commit in ISO8601 format.
