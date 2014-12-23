@@ -19,6 +19,7 @@ import subprocess
 
 locale.setlocale(locale.LC_ALL, '')
 
+
 def gitdate():
     """Get the date from the latest commit in ISO8601 format.
     """
