@@ -11,13 +11,11 @@
 """Fill the Date and Revision keywords from the latest git commit and tag and
    subtitutes them in the standard input."""
 
-import fileinput
-import locale
+import io
 import os
 import re
 import subprocess
-
-locale.setlocale(locale.LC_ALL, '')
+import sys
 
 
 def gitdate():
@@ -59,7 +57,8 @@ def main():
         sys.exit(1)
     date = gitdate()
     rev = gitrev()
-    for line in fileinput.input():
+    input_stream = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
+    for line in input_stream:
         line = dre.sub(date, line)
         print(rre.sub(rev, line), end="")
 

@@ -10,17 +10,16 @@
 
 """Remove the Date and Revision keyword contents from the standard input."""
 
+import io
 import re
-import fileinput
-import locale
-
-locale.setlocale(locale.LC_ALL, '')
+import sys
 
 if __name__ == '__main__':
     dre = re.compile(''.join([r'\$', r'Date.*\$']))
     drep = ''.join(['$', 'Date', '$'])
     rre = re.compile(''.join([r'\$', r'Revision.*\$']))
     rrep = ''.join(['$', 'Revision', '$'])
-    for line in fileinput.input():
+    input_stream = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
+    for line in input_stream:
         line = dre.sub(drep, line)
         print(rre.sub(rrep, line), end="")
