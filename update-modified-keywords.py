@@ -2,8 +2,7 @@
 # vim:fileencoding=utf-8:ft=python
 #
 # Author: R.F. Smith <rsmith@xs4all.nl>
-# $Date$
-# $Revision$
+# Last modified: 2015-05-03 22:43:37 +0200
 #
 # To the extent possible under law, Roland Smith has waived all copyright and
 # related or neighboring rights to update-modified-keywords.py. This work is
