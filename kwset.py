@@ -2,7 +2,7 @@
 # vim:fileencoding=utf-8:ft=python
 #
 # Author: R.F. Smith <rsmith@xs4all.nl>
-# Last modified: 2015-05-03 22:07:14 +0200
+# Last modified: 2015-09-23 22:18:34 +0200
 #
 # To the extent possible under law, Roland Smith has waived all copyright and
 # related or neighboring rights to kwset.py. This work is published from
@@ -16,6 +16,23 @@ import os
 import re
 import subprocess
 import sys
+
+
+def main():
+    """Main program.
+    """
+    dre = re.compile(''.join([r'\$', r'Date:?\$']))
+    rre = re.compile(''.join([r'\$', r'Revision:?\$']))
+    currp = os.getcwd()
+    if not os.path.exists(currp + '/.git'):
+        print >> sys.stderr, 'This directory is not controlled by git!'
+        sys.exit(1)
+    date = gitdate()
+    rev = gitrev()
+    input_stream = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
+    for line in input_stream:
+        line = dre.sub(date, line)
+        print(rre.sub(rev, line), end="")
 
 
 def gitdate():
@@ -38,30 +55,12 @@ def gitrev():
     """
     args = ['git', 'describe', '--tags', '--always']
     try:
-        with open(os.devnull, 'w') as bb:
-            r = subprocess.check_output(args,
-                                        stderr=bb,
-                                        universal_newlines=True)[:-1]
+        r = subprocess.check_output(args,
+                                    stderr=subprocess.DEVNULL,
+                                    universal_newlines=True)[:-1]
     except subprocess.CalledProcessError:
         return ''.join(['$', 'Revision', '$'])
     return ''.join(['$', 'Revision: ', r, ' $'])
-
-
-def main():
-    """Main program.
-    """
-    dre = re.compile(''.join([r'\$', r'Date:?\$']))
-    rre = re.compile(''.join([r'\$', r'Revision:?\$']))
-    currp = os.getcwd()
-    if not os.path.exists(currp + '/.git'):
-        print >> sys.stderr, 'This directory is not controlled by git!'
-        sys.exit(1)
-    date = gitdate()
-    rev = gitrev()
-    input_stream = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
-    for line in input_stream:
-        line = dre.sub(date, line)
-        print(rre.sub(rev, line), end="")
 
 
 if __name__ == '__main__':
