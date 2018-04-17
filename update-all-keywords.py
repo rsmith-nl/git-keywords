@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
-# vim:fileencoding=utf-8:ft=python
+# file: update-all-keywords.py
+# vim:fileencoding=utf-8:fdm=marker:ft=python
 #
-# Author: R.F. Smith <rsmith@xs4all.nl>
-# Last modified: 2015-09-23 21:17:05 +0200
-#
-# To the extent possible under law, Roland Smith has waived all copyright and
-# related or neighboring rights to update-all-keywords.py. This work is
-# published from the Netherlands.
-# See http://creativecommons.org/publicdomain/zero/1.0/
-
+# Copyright © 2013-2015 R.F. Smith <rsmith@xs4all.nl>.
+# SPDX-License-Identifier: MIT
+# Created: 2013-07-17T18:06:53+02:00
+# Last modified: 2018-04-17T18:55:01+0200
 """Remove and check out all files under git's control that contain keywords in
 the current working directory."""
 

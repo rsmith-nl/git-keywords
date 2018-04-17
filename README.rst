@@ -5,7 +5,7 @@ Helper scripts for keyword expansion in git
 :tags: git, keywords
 :author: Roland Smith
 
-.. Last modified: 2015-05-14 18:02:25 +0200
+.. Last modified: 2018-04-17T18:56:58+0200
 
 One of the things I liked about the old rcs_ revision control system was that
 it supported keyword expansion in files.  Unlike systems like ``rcs``, ``cvs``
@@ -93,15 +93,3 @@ files that are under git's control.
 
 Put both these scripts in a location in your ``$PATH``, and then make symbolic
 links from ``.git/hooks/post-commit`` to the appropriate script.
-
-.. NOTE::
-
-  .. image:: http://i.creativecommons.org/p/zero/1.0/88x31.png
-        :alt: CC0
-        :align: center
-        :target: http://creativecommons.org/publicdomain/zero/1.0/
-
-  To the extent possible under law, Roland Smith has waived all copyright and
-  related or neighboring rights to ``kwset.py``, ``kwclean.py``,
-  ``update-all-keywords.py`` and ``update-modified-keywords.py``. These
-  works are published from the Netherlands.
