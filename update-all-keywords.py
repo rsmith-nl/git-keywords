@@ -5,14 +5,15 @@
 # Copyright © 2013-2015 R.F. Smith <rsmith@xs4all.nl>.
 # SPDX-License-Identifier: MIT
 # Created: 2013-07-17T18:06:53+02:00
-# Last modified: 2018-04-17T18:55:01+0200
+# Last modified: 2019-07-27T20:56:24+0200
 """Remove and check out all files under git's control that contain keywords in
 the current working directory."""
 
 from base64 import b64decode
 import mmap
+import logging
 import os
-import subprocess
+import subprocess as sp
 import sys
 
 
@@ -22,11 +23,17 @@ def main(args):
     Arguments:
         args: command line arguments
     """
+    logging.basicConfig(level='INFO', format='%(levelname)s: %(message)s')
     # Check if git is available.
-    checkfor(['git', '--version'])
+    try:
+        sp.run(['git'], stdout=sp.DEVNULL, stderr=sp.DEVNULL)
+        logging.info('found “git”')
+    except FileNotFoundError:
+        logging.error('the program “git” cannot be found')
+        sys.exit(1)
     # Check if .git exists
     if not os.access('.git', os.F_OK):
-        print('No .git directory found!')
+        logging.error('No .git directory found!')
         sys.exit(1)
     # Get all files that are controlled by git.
     files = git_ls_files()
@@ -45,29 +52,9 @@ def main(args):
         for fn in kwfn:
             os.remove(fn)
         sargs = ['git', 'checkout', '-f'] + kwfn
-        subprocess.call(sargs)
+        sp.run(sargs, stdout=sp.DEVNULL, stderr=sp.DEVNULL)
     else:
         print('{}: Nothing to update.'.format(args[0]))
-
-
-def checkfor(args):
-    """Make sure that a program necessary for using this script is
-    available.
-
-    Arguments:
-        args: String or list of strings of commands. A single string may
-              not contain spaces.
-    """
-    if isinstance(args, str):
-        if ' ' in args:
-            raise ValueError('No spaces in single command allowed.')
-        args = [args]
-    try:
-        subprocess.check_call(args, stdout=subprocess.DEVNULL,
-                              stderr=subprocess.DEVNULL)
-    except subprocess.CalledProcessError:
-        print("Required program '{}' not found! exiting.".format(args[0]))
-        sys.exit(1)
 
 
 def git_ls_files():
@@ -77,8 +64,8 @@ def git_ls_files():
         A list of files
     """
     args = ['git', 'ls-files']
-    flist = subprocess.check_output(args).decode('utf8').splitlines()
-    return flist
+    cp = sp.run(args, text=True, stdout=sp.PIPE, stderr=sp.DEVNULL)
+    return cp.stdout.splitlines()
 
 
 def git_not_checkedin():
@@ -87,10 +74,8 @@ def git_not_checkedin():
     Returns:
         A list of modified files that are not checked in.
     """
-    lns = subprocess.check_output(['git', 'status', '-s'])
-    lns.decode('utf8').splitlines()
-    lns = [l.split()[-1] for l in lns]
-    return lns
+    cp = sp.run(['git', 'status', '-s'], text=True, stdout=sp.PIPE, stderr=sp.DEVNULL)
+    return [l.split()[-1] for l in cp.stdout.splitlines()]
 
 
 def keywordfiles(fns):

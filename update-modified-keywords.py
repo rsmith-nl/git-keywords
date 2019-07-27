@@ -5,14 +5,15 @@
 # Copyright © 2013-2015 R.F. Smith <rsmith@xs4all.nl>.
 # SPDX-License-Identifier: MIT
 # Created: 2013-07-17T18:58:42+02:00
-# Last modified: 2018-04-17T18:56:05+0200
+# Last modified: 2019-07-27T21:01:32+0200
 """Remove and check out those files that that contain keywords and have
 changed since in the last commit in the current working directory."""
 
 from base64 import b64decode
 import mmap
+import logging
 import os
-import subprocess
+import subprocess as sp
 import sys
 
 
@@ -22,8 +23,14 @@ def main(args):
     Arguments:
         args: command line arguments
     """
+    logging.basicConfig(level='INFO', format='%(levelname)s: %(message)s')
     # Check if git is available.
-    checkfor(['git', '--version'])
+    try:
+        sp.run(['git'], stdout=sp.DEVNULL, stderr=sp.DEVNULL)
+        logging.info('found “git”')
+    except FileNotFoundError:
+        logging.error('the program “git” cannot be found')
+        sys.exit(1)
     # Check if .git exists
     if not os.access('.git', os.F_OK):
         print('No .git directory found!')
@@ -43,27 +50,7 @@ def main(args):
     for fn in kwfn:
         os.remove(fn)
     sargs = ['git', 'checkout', '-f'] + kwfn
-    subprocess.call(sargs)
-
-
-def checkfor(args):
-    """Make sure that a program necessary for using this script is
-    available.
-
-    Arguments:
-    args -- string or list of strings of commands. A single string may
-            not contain spaces.
-    """
-    if isinstance(args, str):
-        if ' ' in args:
-            raise ValueError('No spaces in single command allowed.')
-        args = [args]
-    try:
-        subprocess.check_call(args, stdout=subprocess.DEVNULL,
-                              stderr=subprocess.DEVNULL)
-    except subprocess.CalledProcessError:
-        print("Required program '{}' not found! exiting.".format(args[0]))
-        sys.exit(1)
+    sp.call(sargs)
 
 
 def modifiedfiles():
@@ -76,16 +63,18 @@ def modifiedfiles():
     try:
         args = ['git', 'diff-tree', 'HEAD~1', 'HEAD', '--name-only', '-r',
                 '--diff-filter=ACMRT']
-        fnl = subprocess.check_output(args, stderr=subprocess.DEVNULL)
-        fnl = fnl.decode('utf8').splitlines()
+        cp = sp.check_output(
+            args, stdout=sp.PIPE, stderr=sp.DEVNULL, text=True, check=True
+        )
+        fnl = cp.stdout.splitlines()
         # Deal with unmodified repositories
-        if len(fnl) == 1 and fnl[0] is 'clean':
+        if len(fnl) == 1 and fnl[0] == 'clean':
             return []
-    except subprocess.CalledProcessError as e:
-        if e.returncode == 128:  # new repository
+    except sp.CalledProcessError:
+        if cp.returncode == 128:  # new repository
             args = ['git', 'ls-files']
-            fnl = subprocess.check_output(args, stderr=subprocess.DEVNULL)
-            fnl = fnl.decode('utf8').splitlines()
+            cp = sp.run(args, stdout=sp.PIPE, stderr=sp.DEVNULL, text=True)
+            fnl = cp.stdout.splitlines()
     # Only return regular files.
     fnl = [i for i in fnl if os.path.isfile(i)]
     return fnl
