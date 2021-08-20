@@ -13,9 +13,9 @@ import re
 import sys
 
 if __name__ == '__main__':
-    dre = re.compile(''.join([r'\$', r'Date.*\$']))
+    dre = re.compile(''.join([r'\$', r'Date.*?\$']))
     drep = ''.join(['$', 'Date', '$'])
-    rre = re.compile(''.join([r'\$', r'Revision.*\$']))
+    rre = re.compile(''.join([r'\$', r'Revision.*?\$']))
     rrep = ''.join(['$', 'Revision', '$'])
     input_stream = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
     for line in input_stream:
